@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  session: MyText
+  picture_id: 
+  scott: MyString
+  boolean: MyString
+
+two:
+  session: MyText
+  picture_id: 
+  scott: MyString
+  boolean: MyString

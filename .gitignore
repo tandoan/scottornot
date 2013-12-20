@@ -1,0 +1,14 @@
+*.sublime-project
+*.sublime-workspace
+*.lock
+*.log
+*.node
+.vagrant
+Cheffile.lock
+*.DS_Store
+
+node_modules
+build
+cookbooks
+tmp
+.idea

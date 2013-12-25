@@ -6,7 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Picture.create ({url: '1.jpg'})
-Picture.create ({url:'2.jpg'})
-Picture.create ({url:'3.jpg'})
-Picture.create ({url:'4.jpg'})
+Picture.create ({url: '/1.jpg'})
+Picture.create ({url:'/2.jpg'})
+Picture.create ({url:'/3.jpg'})
+Picture.create ({url:'/4.jpg'})

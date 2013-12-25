@@ -9,6 +9,8 @@ class VotesController < ApplicationController
       previous_votes = []
     end
 
+    @votes = previous_votes.inspect
+
     id = Picture.where.not(id: previous_votes).pluck(:id).shuffle[0]
     @picture = Picture.find_by_id(id)
 
@@ -21,7 +23,42 @@ class VotesController < ApplicationController
   end
 
   def vote
+    p = post_params()
+
     #save vote
+    is_scott = false
+    if "scott" == p[:scott]
+      is_scott = true
+    end
+
+    @vote = Vote.new({:picture_id=>p[:picture_id], :scott=>is_scott})
+    @vote.save
+
+
+    #deal with cookies
+    previous_votes = cookies.permanent.signed[:votes]
+
+    if previous_votes.nil?
+      previous_votes = []
+    end
+
+    previous_votes.push p[:picture_id]
+
+    if (previous_votes.count > 20)
+      previous_votes.shift
+    end
+    cookies.permanent.signed[:votes] = previous_votes
+
+
     #go back to vote site
+    #redirect_to 'votes#index'
+    index
+
+
+  end
+
+  private
+  def post_params
+    params.permit(:scott, :picture_id)
   end
 end

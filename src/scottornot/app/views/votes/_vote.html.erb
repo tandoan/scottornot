@@ -1,0 +1,30 @@
+<div class="container">
+
+  <div class="container">
+
+                   <%= @votes %>
+  </div>
+
+  <div class="container">
+
+    <img src="<%= @picture.url %>" id="hero">
+
+
+    <%= form_tag({controller: "votes", action: "vote"}, method: "post", :id=> 'votingForm')   do %>
+        <%= hidden_field_tag(:picture_id, @picture.id) %>
+
+
+        <%= radio_button_tag(:scott, "scott") %>
+        <%= label_tag(:scott_scott, "Scott") %>
+
+        <%= radio_button_tag(:scott, "not") %>
+        <%= label_tag(:scott_not, "Not") %>
+         
+        <%= submit_tag("Vote!") %>
+
+    <% end %>
+
+  </div>
+
+</div>
+

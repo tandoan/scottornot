@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131217222749) do
+ActiveRecord::Schema.define(version: 20131225045059) do
 
   create_table "pictures", force: true do |t|
     t.text     "url"
@@ -22,8 +22,7 @@ ActiveRecord::Schema.define(version: 20131217222749) do
   create_table "votes", force: true do |t|
     t.text     "session"
     t.integer  "picture_id"
-    t.string   "scott"
-    t.string   "boolean"
+    t.boolean  "scott",      limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -9,6 +9,9 @@ class VotesController < ApplicationController
       previous_votes = []
     end
 
+    prior_vote = previous_votes.last
+    @prior_picture = Picture.find_by_id(prior_vote)
+
     @votes = previous_votes.inspect
 
     id = Picture.where.not(id: previous_votes).pluck(:id).shuffle[0]

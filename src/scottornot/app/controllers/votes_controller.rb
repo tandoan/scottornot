@@ -1,27 +1,40 @@
 class VotesController < ApplicationController
-  def index
-
-    #check if cookies exist, if not, we're good
-
+  
+  def get_previous_votes
     previous_votes = cookies.permanent.signed[:votes]
 
     if previous_votes.nil?
       previous_votes = []
     end
+    return previous_votes
+  end
+
+  def add_to_previous_votes(picture_id)
+
+    previous_votes = get_previous_votes
+    previous_votes.push picture_id
+
+    if (previous_votes.count > 20)
+      previous_votes.shift
+    end
+    cookies.permanent.signed[:votes] = previous_votes
+  end
+
+
+  def index
+    previous_votes = get_previous_votes
 
     prior_vote = previous_votes.last
     @prior_picture = Picture.find_by_id(prior_vote)
 
-    @votes = previous_votes.inspect
+    @prior_count = Vote.where('scott = :is_scott and picture_id= :picture_id', {is_scott: true, picture_id: prior_vote}).count()
+    @total_prior_votes = Vote.where('picture_id= :picture_id', {picture_id: prior_vote}).count()
 
-    id = Picture.where.not(id: previous_votes).pluck(:id).shuffle[0]
-    @picture = Picture.find_by_id(id)
+    @percentage_prior = ((@prior_count.to_f/@total_prior_votes) * 100)
 
     #pick a random picture that isn't in the last 20 from cookies
-
-    #display random pic
-
-    #display last voted on
+    id = Picture.where.not(id: previous_votes).pluck(:id).shuffle[0]
+    @picture = Picture.find_by_id(id)
 
   end
 
@@ -38,23 +51,8 @@ class VotesController < ApplicationController
     @vote.save
 
 
-    #deal with cookies
-    previous_votes = cookies.permanent.signed[:votes]
-
-    if previous_votes.nil?
-      previous_votes = []
-    end
-
-    previous_votes.push p[:picture_id]
-
-    if (previous_votes.count > 20)
-      previous_votes.shift
-    end
-    cookies.permanent.signed[:votes] = previous_votes
-
-
+    add_to_previous_votes p[:picture_id]
     #go back to vote site
-    #redirect_to 'votes#index'
     index
 
 

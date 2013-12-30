@@ -48,14 +48,15 @@ class VotesController < ApplicationController
     end
 
     @vote = Vote.new({:picture_id=>p[:picture_id], :scott=>is_scott})
-    @vote.save
 
-
-    add_to_previous_votes p[:picture_id]
-    #go back to vote site
-    index
-
-
+    if @vote.save
+      add_to_previous_votes p[:picture_id]
+      flash[:notice] = "Voted saved!"
+      redirect_to '/vote/'
+    else
+      flash[:error] = "Error saving vote"
+      redirect_to :action => :index
+    end
   end
 
   private

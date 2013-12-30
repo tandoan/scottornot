@@ -6,7 +6,12 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Picture.create ({url: '/1.jpg'})
-Picture.create ({url:'/2.jpg'})
-Picture.create ({url:'/3.jpg'})
-Picture.create ({url:'/4.jpg'})
+for i in 1..34
+	Picture.create ({url: "/#{i}.jpg"})
+end
+
+
+Vote.create({scott: true, picture_id: 34})
+Vote.create({scott: true, picture_id: 34})
+Vote.create({scott: true, picture_id: 34})
+Vote.create({scott: false, picture_id: 34})

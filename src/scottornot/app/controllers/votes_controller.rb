@@ -29,9 +29,9 @@ class VotesController < ApplicationController
       @prior_picture = Picture.find_by_id(prior_vote)
 
       @prior_count = Vote.where('scott = :is_scott and picture_id= :picture_id', {is_scott: true, picture_id: prior_vote}).count()
-      @total_prior_votes = Vote.where('picture_id= :picture_id', {picture_id: prior_vote}).count()
+      @prior_total_votes = Vote.where('picture_id= :picture_id', {picture_id: prior_vote}).count()
 
-      @percentage_prior = ((@prior_count.to_f/@total_prior_votes) * 100)
+      @prior_percentage = ((@prior_count.to_f/@prior_total_votes) * 100)
     end
 
     #pick a random picture that isn't in the last 20 from cookies

@@ -1,27 +1,29 @@
 
-<div class="row">
-
-  <% if @percentage_prior %>
-  <div class="col-md-3">
-    <h3 class="text-center">Last vote!</h3>
-    <%= number_with_precision(@percentage_prior, :precision => 2) %>% Scott
-    <img src="<%= @prior_picture.url %>" id="prior_picture">        
-  </div>
-  <% end %>
-
-  <div class="col-md-9">
-
-    <img src="<%= @picture.url %>" id="hero">
+<div class="container">
+  <div class="row">
 
 
-    <%= form_tag({controller: "votes", action: "vote"}, method: "post", :id=> 'votingForm')   do %>
-        <%= hidden_field_tag(:picture_id, @picture.id) %>
-        <%= submit_tag("Scott!") %>
-        <%= submit_tag("Not!") %>
+
+    <section class="col-md-8 col-md-push-4">
+      <img src="<%= @picture.url %>" id="hero">
+      <%= form_tag({controller: "votes", action: "vote"}, method: "post", :id=> 'voting-form', :class=>'text-center')   do %>
+          <%= hidden_field_tag(:picture_id, @picture.id) %>
+          <%= submit_tag("Scott!") %>
+          <%= submit_tag("Not!") %>
+      <% end %>
+    </section>
+    
+    <% if @prior_percentage %>
+    <aside class="prior-vote col-md-3 col-md-pull-8 text-center">
+      <h4 class="text-center">Your Last vote!</h4>
+      <img src="<%= @prior_picture.url %>" id="prior-hero">        
+      <%= number_with_precision(@prior_percentage, :precision => 2) %>% Scott!
+    </aside>
 
     <% end %>
+    <aside class="col-md-1">
+      ad space
+    </aside>
 
   </div>
-
 </div>
-

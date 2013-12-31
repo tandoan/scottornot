@@ -13,8 +13,13 @@
       <%= render 'layouts/navigation' %>
     </header>
     <main role="main">
-       <%= render 'layouts/messages' %>
-       <%= yield %>
+      <%= render 'layouts/messages' %>
+      <div class="container">
+        <div class="row">
+          <%= yield %>
+          <%= render 'layouts/ads' %>
+        </div>
+      </div>
     </main>
   </body>
 </html>

@@ -33,7 +33,7 @@ end
 
 Then(/^I should see a picture$/) do
   #image with an id of 'hero'
-  find("#hero")
+  find("img#hero")
 end
 
 Then(/^I should see a voting fom$/) do

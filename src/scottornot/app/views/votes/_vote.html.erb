@@ -1,11 +1,13 @@
 
 <div class="row">
 
+  <% if @percentage_prior %>
   <div class="col-md-3">
     <h3 class="text-center">Last vote!</h3>
     <%= number_with_precision(@percentage_prior, :precision => 2) %>% Scott
     <img src="<%= @prior_picture.url %>" id="prior_picture">        
   </div>
+  <% end %>
 
   <div class="col-md-9">
 
@@ -14,15 +16,8 @@
 
     <%= form_tag({controller: "votes", action: "vote"}, method: "post", :id=> 'votingForm')   do %>
         <%= hidden_field_tag(:picture_id, @picture.id) %>
-
-
-        <%= radio_button_tag(:scott, "scott") %>
-        <%= label_tag(:scott_scott, "Scott") %>
-
-        <%= radio_button_tag(:scott, "not") %>
-        <%= label_tag(:scott_not, "Not") %>
-         
-        <%= submit_tag("Vote!") %>
+        <%= submit_tag("Scott!") %>
+        <%= submit_tag("Not!") %>
 
     <% end %>
 

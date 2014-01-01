@@ -1,41 +1,54 @@
 class VotesController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: :invalid_vote
   
+  def invalid_vote
+    redirect_to '/vote/', notice: 'Invalid Vote'
+  end 
+  
+
   #move these cookie methods to the Picture model ?
-  def get_previous_votes
-    previous_votes = cookies.permanent.signed[:votes]
+  def get_prior_votes
+    prior_votes = cookies.permanent.signed[:votes]
 
-    if previous_votes.nil?
-      previous_votes = []
+    if prior_votes.nil?
+      prior_votes = []
     end
-    return previous_votes
+    return prior_votes
   end
 
-  def add_to_previous_votes(picture_id)
+  def add_to_prior_votes(picture_id)
 
-    previous_votes = get_previous_votes
-    previous_votes.push picture_id
+    prior_votes = get_prior_votes
+    prior_votes.push picture_id
 
-    if (previous_votes.count > 20)
-      previous_votes.shift
+    if (prior_votes.count > 20)
+      prior_votes.shift
     end
-    cookies.permanent.signed[:votes] = previous_votes
+    cookies.permanent.signed[:votes] = prior_votes
   end
 
+  def get_prior_picture (prior_vote)
+    return prior_picture = Picture.find_by_id(prior_vote)
+  end
+
+  def get_prior_percentage (prior_vote)
+      prior_count = Vote.where('scott = :is_scott and picture_id= :picture_id', {is_scott: true, picture_id: prior_vote}).count()
+      prior_total_votes = Vote.where('picture_id= :picture_id', {picture_id: prior_vote}).count()
+
+      prior_percentage = ((prior_count.to_f/prior_total_votes) * 100)
+      return prior_percentage
+  end
 
   def index
-    previous_votes = get_previous_votes
-    prior_vote = previous_votes.last
-    if prior_vote
-      @prior_picture = Picture.find_by_id(prior_vote)
+    prior_votes = get_prior_votes
 
-      @prior_count = Vote.where('scott = :is_scott and picture_id= :picture_id', {is_scott: true, picture_id: prior_vote}).count()
-      @prior_total_votes = Vote.where('picture_id= :picture_id', {picture_id: prior_vote}).count()
-
-      @prior_percentage = ((@prior_count.to_f/@prior_total_votes) * 100)
+    if(prior_votes.last)
+      @prior_picture = get_prior_picture prior_votes.last
+      @prior_percentage = get_prior_percentage prior_votes.last
     end
 
     #pick a random picture that isn't in the last 20 from cookies
-    id = Picture.where.not(id: previous_votes).pluck(:id).shuffle[0]
+    id = Picture.where.not(id: prior_votes).pluck(:id).shuffle[0]
     @picture = Picture.find_by_id(id)
 
   end
@@ -53,13 +66,19 @@ class VotesController < ApplicationController
 
     @vote = Vote.new({:picture_id=>p[:picture_id], :scott=>is_scott})
 
-    if @vote.save
-      add_to_previous_votes p[:picture_id]
-      flash[:notice] = "Voted saved!"
-      redirect_to '/vote/'
-    else
-      flash[:error] = "Error saving vote"
-      redirect_to :action => :index
+    respond_to do |format|
+      if @vote.save
+        add_to_prior_votes p[:picture_id]
+        flash[:notice] = "Voted saved!"
+
+        format.html { redirect_to '/vote/'}
+#        format.json { render action: ​'index'​, status: :created, location: @vote }
+
+      else
+        flash[:error] = "Error saving vote"
+        format.html { redirect_to :action => :index }
+        format.json { render json: @vote, status: :unprocessable_entity } 
+      end
     end
   end
 

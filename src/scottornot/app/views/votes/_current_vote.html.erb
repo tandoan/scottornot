@@ -2,7 +2,7 @@
   <%= image_tag(@picture.url, id: 'hero') %>
   <%= form_tag({controller: "votes", action: "vote"}, method: "post", :id=> 'voting-form', :class=>'text-center')   do %>
       <%= hidden_field_tag(:picture_id, @picture.id) %>
-      <%= submit_tag("Scott!") %>
-      <%= submit_tag("Not!") %>
+      <%= submit_tag "Scott!", class: "scott-button" %>
+      <%= submit_tag "Not!", class: "not-button" %>
   <% end %>
 </section>

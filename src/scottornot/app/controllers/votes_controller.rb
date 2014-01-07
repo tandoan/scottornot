@@ -75,12 +75,15 @@ class VotesController < ApplicationController
 
         #this is only for json rendering...
         @prior_percentage = get_prior_percentage p[:picture_id]
+        @prior_percentage = @prior_percentage.to_s
         prior_votes = get_prior_votes
 
         id = Picture.where.not(id: prior_votes).pluck(:id).shuffle[0]
         @picture = Picture.find_by_id(id)
 
-        tmp = { :prior_percentage => @prior_percentage, :picture => @picture}
+        tpicture = {:id => @picture[:id], :url => @picture[:url]}
+
+        tmp = { :prior_percentage => @prior_percentage, :picture => tpicture}
         format.js { render json: tmp, status: :ok }
 
       else

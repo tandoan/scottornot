@@ -1,6 +1,6 @@
 <section class="col-md-8 col-md-push-4">
   <%= image_tag(@picture.url, id: 'hero') %>
-  <%= form_tag({controller: "votes", action: "vote"}, method: "post", :id=> 'voting-form', :class=>'text-center', remote: true)   do %>
+  <%= form_tag({controller: "votes", action: "vote"}, method: "post", :id=> 'voting-form', :class=>'text-center', remote: true, "data-type" => :json,)   do %>
       <%= hidden_field_tag(:picture_id, @picture.id) %>
       <%= submit_tag "Scott!", class: "scott-button" %>
       <%= submit_tag "Not!", class: "not-button" %>

@@ -5,9 +5,7 @@
 
 
 jQuery ($) ->
-  $('form#voting-form').on "ajax:success", (data) =>
-  
-    alert('sup')
+  $('form#voting-form').on "ajax:success", (e, data, status, xhr) =>
     old_hero_src = $('#hero').attr('src')
     $('#prior-hero').attr('src', old_hero_src)
 

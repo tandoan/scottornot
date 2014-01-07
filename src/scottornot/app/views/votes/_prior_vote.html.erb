@@ -2,6 +2,6 @@
   <aside class="prior-vote col-md-3 col-md-pull-8 text-center">
     <h4 class="text-center">Your Last vote!</h4>
     <%= image_tag(@prior_picture.url, id: 'prior-hero') %>
-  	<%= number_with_precision(@prior_percentage, :precision => 2) %>% Scott!
+  	<span data-prior-percentage="<%= number_with_precision(@prior_percentage, :precision => 2)%>"><%= number_with_precision(@prior_percentage, :precision => 2) %></span>% Scott!
   </aside>
 <% end %>

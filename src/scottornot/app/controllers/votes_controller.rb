@@ -69,10 +69,19 @@ class VotesController < ApplicationController
     respond_to do |format|
       if @vote.save
         add_to_prior_votes p[:picture_id]
-        flash[:notice] = "Voted saved!"
 
+        flash[:notice] = "Voted saved!"
         format.html { redirect_to '/vote/'}
-#        format.json { render action: ​'index'​, status: :created, location: @vote }
+
+        #this is only for json rendering...
+        @prior_percentage = get_prior_percentage p[:picture_id]
+        prior_votes = get_prior_votes
+
+        id = Picture.where.not(id: prior_votes).pluck(:id).shuffle[0]
+        @picture = Picture.find_by_id(id)
+
+        tmp = { :prior_percentage => @prior_percentage, :picture => @picture}
+        format.js { render json: tmp, status: :ok }
 
       else
         flash[:error] = "Error saving vote"
